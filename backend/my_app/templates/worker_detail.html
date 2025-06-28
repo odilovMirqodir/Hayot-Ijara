@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<main class="main-content">
+    <div class="content-wrapper">
+        <!-- Breadcrumb -->
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+            <a href="{% url 'index' %}">Dashboard</a>
+            <span class="breadcrumb-separator">></span>
+            <a href="{% url 'index' %}">Workers</a>
+            <span class="breadcrumb-separator">></span>
+            <span class="breadcrumb-current">{{ worker.username|default:"N/A" }}</span>
+        </nav>
+
+        <!-- Worker Profile -->
+        <section class="profile-section">
+            <div class="profile-card">
+                <div class="profile-header">
+                    <div class="profile-avatar"></div>
+                    <div class="profile-info">
+                        <h2 class="profile-username">{{ worker.username|default:"N/A" }}</h2>
+                        <p class="profile-name">{{ worker.first_name }} {{ worker.last_name }}</p>
+                        <span class="language-badge">{{ worker.language|default:"Unknown" }}</span>
+                    </div>
+                </div>
+                <div class="profile-stats">
+                    <div class="stat-item">
+                        <span class="stat-label">Total Check-ins</span>
+                        <span class="stat-value">{{ total_checkins }}</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Last Check-in</span>
+                        <span class="stat-value">
+                            {% if last_checkin %}
+                                {{ last_checkin.check_in_time|date:"Y-m-d H:i" }}
+                            {% else %}
+                                N/A
+                            {% endif %}
+                        </span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Status</span>
+                        <span class="stat-value status-active">Active</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Recent Check-ins -->
+        <section class="checkins-section">
+            <h3 class="section-title">Last 10 Check-Ins</h3>
+            <div class="checkins-container">
+                {% for checkin in checkins %}
+                <div class="checkin-item">
+                    <div class="checkin-date">{{ checkin.check_in_time|date:"Y-m-d" }}</div>
+                    <div class="checkin-time">{{ checkin.check_in_time|date:"H:i" }}</div>
+                    <div class="checkin-location">{{ checkin.location_name|default:"Unknown" }}</div>
+                    <div class="checkin-actions">
+                        {% if checkin.video %}
+                        <a href="{{ checkin.video.url }}" class="video-link" target="_blank">View Video</a>
+                        {% else %}
+                        <span class="video-link disabled">No Video</span>
+                        {% endif %}
+                    </div>
+                </div>
+                {% empty %}
+                <div class="checkin-item">
+                    <div class="checkin-date">No check-ins found.</div>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+
+        <!-- Back Button -->
+        <div class="back-section">
+            <a href="{% url 'index' %}" class="back-btn">← Back to List</a>
+        </div>
+    </div>
+</main>
+{% endblock content %}

@@ -1,0 +1,125 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<main class="main-content">
+    <div class="content-wrapper">
+        <!-- Search & Filters -->
+        <section class="filters-section">
+            <div class="filters-container">
+                <form method="get" class="filters-container">
+                    <div class="search-group">
+                        <input
+                                type="text"
+                                name="search"
+                                class="search-input"
+                                placeholder="Search workers..."
+                                value="{{ search_query }}"
+                        >
+                    </div>
+                    <div class="date-group">
+                        <input
+                                type="date"
+                                name="start_date"
+                                class="date-input"
+                                aria-label="Start date"
+                                value="{{ start_date }}"
+                        >
+                        <input
+                                type="date"
+                                name="end_date"
+                                class="date-input"
+                                aria-label="End date"
+                                value="{{ end_date }}"
+                        >
+                    </div>
+                    <button type="submit" class="filter-btn">Filter</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- Summary Widgets -->
+        <section class="widgets-section">
+            <div class="widgets-grid">
+                <div class="widget-card">
+                    <div class="widget-header"><h3>Last 7 Days</h3></div>
+                    <div class="widget-value">{{ checkins_last_7_days }}</div>
+                    <div class="widget-label">Check-ins</div>
+                </div>
+                <div class="widget-card">
+                    <div class="widget-header"><h3>Last 30 Days</h3></div>
+                    <div class="widget-value">{{ checkins_last_30_days }}</div>
+                    <div class="widget-label">Check-ins</div>
+                </div>
+                <div class="widget-card">
+                    <div class="widget-header"><h3>Top Worker</h3></div>
+                    <div class="widget-value">{{ top_worker_name }}</div>
+                    <div class="widget-label">{{ top_worker_checkins }} check-ins</div>
+                </div>
+                <div class="widget-card">
+                    <div class="widget-header"><h3>Lowest Worker</h3></div>
+                    <div class="widget-value">{{ lowest_worker_name }}</div>
+                    <div class="widget-label">{{ lowest_worker_checkins }} check-ins</div>
+                </div>
+                <div class="widget-card">
+                    <div class="widget-header"><h3>Total Workers</h3></div>
+                    <div class="widget-value">{{ total_workers }}</div>
+                    <div class="widget-label">Active workers</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Data Table -->
+        <section class="table-section">
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Check-In Time</th>
+                        <th>Location</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for checkin in page_obj %}
+                    <tr>
+                        <td data-label="Username">{{ checkin.worker.username|default:"N/A" }}</td>
+                        <td data-label="First Name">{{ checkin.worker.first_name|default:"N/A" }}</td>
+                        <td data-label="Last Name">{{ checkin.worker.last_name|default:"N/A" }}</td>
+                        <td data-label="Check-In Time">{{ checkin.check_in_time|date:"Y-m-d H:i" }}</td>
+                        <td data-label="Location">{{ checkin.location_name|default:"Unknown" }}</td>
+                        <td data-label="Actions">
+                            <a href="{% url 'worker_detail' checkin.worker.pk %}" class="action-btn">View</a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6">No check-ins found.</td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination">
+                {% if page_obj.has_previous %}
+                <a href="?page={{ page_obj.previous_page_number }}&amp;{{ request.GET.urlencode }}"
+                   class="pagination-btn">Previous</a>
+                {% else %}
+                <button class="pagination-btn" disabled>Previous</button>
+                {% endif %}
+                <span class="pagination-info">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+                {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}&amp;{{ request.GET.urlencode }}" class="pagination-btn">Next</a>
+                {% else %}
+                <button class="pagination-btn" disabled>Next</button>
+                {% endif %}
+            </div>
+        </section>
+    </div>
+</main>
+{% endblock content %}

@@ -1,0 +1,22 @@
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+</head>
+<body>
+<!-- Mobile Menu Toggle -->
+<input type="checkbox" id="menu-toggle" class="menu-toggle" aria-label="Toggle navigation menu">
+
+<!-- Header -->
+{% include 'components/_header.html' %}
+
+<!-- Sidebar -->
+{% include 'components/_siderbar.html' %}
+<!-- Main Content -->
+{% block content %}
+{% endblock content %}
+</body>
+</html>

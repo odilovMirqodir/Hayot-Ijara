@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+        }
+        .container {
+            max-width: 400px;
+            margin: 100px auto;
+            background: white;
+            padding: 30px;
+            box-shadow: 0 0 10px rgba(0, 0, 100, 0.3);
+            border-radius: 8px;
+        }
+        h2 {
+            text-align: center;
+            color: #003366;
+        }
+        label {
+            display: block;
+            margin-top: 15px;
+            color: #003366;
+        }
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .btn {
+            background-color: #003366;
+            color: white;
+            padding: 10px;
+            border: none;
+            width: 100%;
+            margin-top: 20px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .btn:hover {
+            background-color: #002244;
+        }
+        .error {
+            color: red;
+            text-align: center;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>Login</h2>
+    {% if messages %}
+    {% for message in messages %}
+    <div class="error">{{ message }}</div>
+    {% endfor %}
+    {% endif %}
+    <form method="POST">
+        {% csrf_token %}
+        <label for="username">Foydalanuvchi nomi:</label>
+        <input type="text" id="username" name="username" required>
+
+        <label for="password">Parol:</label>
+        <input type="password" id="password" name="password" required>
+
+        <button class="btn" type="submit">Kirish</button>
+    </form>
+</div>
+</body>
+</html>
